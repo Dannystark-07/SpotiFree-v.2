@@ -1,7 +1,8 @@
-import React from "react";
-import { Play, Pause, Sparkles, TrendingUp, Music } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Play, Pause, Sparkles, TrendingUp, Music, Flame } from "lucide-react";
 import { useAudio } from "../context/AudioContext";
 import { DEFAULT_TRACKS, CURATED_PLAYLISTS, POPULAR_ARTISTS } from "../data/mockTracks";
+import { getTopCharts } from "../services/musicApi";
 import TrackRow from "../components/TrackRow";
 
 function getGreeting() {
@@ -21,6 +22,29 @@ export default function HomeView() {
   } = useAudio();
 
   const greeting = getGreeting();
+  const [trendingTracks, setTrendingTracks] = useState(DEFAULT_TRACKS);
+  const [loadingTrending, setLoadingTrending] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadTrending() {
+      setLoadingTrending(true);
+      try {
+        const liveTracks = await getTopCharts(12);
+        if (isMounted && liveTracks && liveTracks.length > 0) {
+          setTrendingTracks(liveTracks);
+        }
+      } catch (err) {
+        console.warn("Using default tracks for trending", err);
+      } finally {
+        if (isMounted) setLoadingTrending(false);
+      }
+    }
+    loadTrending();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Quick picks (first 6 items)
   const quickPicks = [
@@ -153,20 +177,25 @@ export default function HomeView() {
 
       {/* Trending Tracks */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-spotify-green" />
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Trending Global Tracks
-          </h2>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-spotify-green" />
+            <h2 className="text-xl font-bold text-white tracking-tight">
+              Trending Global Tracks
+            </h2>
+          </div>
+          <span className="text-[11px] font-semibold text-spotify-green bg-spotify-green/10 px-2.5 py-1 rounded-full border border-spotify-green/20">
+            Full-Length Songs • Unmetered
+          </span>
         </div>
 
-        <div className="bg-neutral-900/40 rounded-xl p-2 border border-white/5">
-          {DEFAULT_TRACKS.map((track, idx) => (
+        <div className="bg-neutral-900/40 rounded-xl p-2 border border-white/5 space-y-1">
+          {trendingTracks.map((track, idx) => (
             <TrackRow
-              key={track.id}
+              key={`${track.id}-${idx}`}
               track={track}
               index={idx}
-              queueList={DEFAULT_TRACKS}
+              queueList={trendingTracks}
             />
           ))}
         </div>
