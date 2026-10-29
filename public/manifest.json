@@ -1,0 +1,18 @@
+{
+  "short_name": "SpotiFree",
+  "name": "SpotiFree v2 - Unlimited Music Streaming",
+  "description": "Stream millions of full-length songs without ads, logins, or limits.",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./",
+  "background_color": "#121212",
+  "theme_color": "#1ed760",
+  "display": "standalone",
+  "orientation": "portrait"
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -6,6 +6,8 @@ import {
   User,
   Github,
   Sparkles,
+  Share2,
+  Check,
 } from "lucide-react";
 import { useAudio } from "../context/AudioContext";
 
@@ -18,10 +20,37 @@ export default function Navbar() {
     navigateTo,
   } = useAudio();
 
+  const [copied, setCopied] = useState(false);
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     if (currentView !== "search") {
       setCurrentView("search");
+    }
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    const shareData = {
+      title: "SpotiFree v2",
+      text: "Stream unlimited music and global hits with no login on SpotiFree!",
+      url: url,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // User closed the share sheet
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+      } catch (e) {
+        console.warn("Clipboard write failed", e);
+      }
     }
   };
 
@@ -70,13 +99,36 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Right: GitHub Link & Guest Status */}
+      {/* Right: Share, GitHub Link & Guest Status */}
       <div className="flex items-center gap-3">
+        {/* Share with Friends Button */}
+        <button
+          onClick={handleShare}
+          className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full transition-all border ${
+            copied
+              ? "bg-spotify-green text-black border-spotify-green shadow-lg scale-105"
+              : "bg-white/10 hover:bg-spotify-green hover:text-black hover:border-spotify-green text-white border-white/10"
+          }`}
+          title="Share link with friends"
+        >
+          {copied ? (
+            <>
+              <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Link Copied!</span>
+            </>
+          ) : (
+            <>
+              <Share2 className="w-3.5 h-3.5" />
+              <span>Share App</span>
+            </>
+          )}
+        </button>
+
         <a
           href="https://github.com/Dannystark-07/SpotiFree-v.2"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-neutral-200 hover:text-white transition-all border border-white/5"
+          className="hidden sm:flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-neutral-200 hover:text-white transition-all border border-white/5"
         >
           <Github className="w-3.5 h-3.5" />
           <span>GitHub</span>
