@@ -10,10 +10,13 @@ import {
   ExternalLink,
   ShieldCheck,
   Sparkles,
+  Info,
+  Github,
+  Award,
 } from "lucide-react";
 import { useAudio } from "../context/AudioContext";
 
-export default function Sidebar({ onCreatePlaylistOpen }) {
+export default function Sidebar({ onCreatePlaylistOpen, onOpenCredits }) {
   const {
     currentView,
     navigateTo,
@@ -38,8 +41,8 @@ export default function Sidebar({ onCreatePlaylistOpen }) {
               <span className="font-black text-xl tracking-tight text-white group-hover:text-spotify-green transition-colors">
                 SpotiFree
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-white/10 text-spotify-green px-1.5 py-0.5 rounded">
-                v2
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-spotify-green text-black px-1.5 py-0.5 rounded font-mono">
+                v2.0
               </span>
             </div>
             <p className="text-[11px] text-neutral-400 font-medium">
@@ -146,24 +149,44 @@ export default function Sidebar({ onCreatePlaylistOpen }) {
         })}
       </div>
 
-      {/* Bottom Status Badge */}
-      <div className="p-4 m-3 rounded-xl bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/5 space-y-2">
-        <div className="flex items-center gap-2 text-xs font-semibold text-spotify-green">
-          <ShieldCheck className="w-4 h-4" />
-          <span>Unlimited Streaming</span>
+      {/* Developer & Credits Card */}
+      <div className="p-3 m-3 rounded-xl bg-neutral-900/80 border border-white/10 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-spotify-green to-emerald-400 text-black font-black text-xs flex items-center justify-center shadow">
+              DS
+            </div>
+            <div>
+              <p className="text-xs font-bold text-white flex items-center gap-1">
+                DannyStark
+                <Award className="w-3 h-3 text-spotify-green fill-spotify-green" />
+              </p>
+              <p className="text-[10px] text-neutral-400">@Dannystark-07</p>
+            </div>
+          </div>
+          <span className="text-[10px] font-mono bg-white/10 text-neutral-300 px-1.5 py-0.5 rounded">
+            v2.0.0
+          </span>
         </div>
-        <p className="text-[11px] text-neutral-400 leading-relaxed">
-          No sign-in, credit card, or ads required. Your library saves automatically.
-        </p>
-        <a
-          href="https://github.com/Dannystark-07/SpotiFree-v.2"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-300 hover:text-white hover:underline pt-1"
-        >
-          <span>SpotiFree-v.2 on GitHub</span>
-          <ExternalLink className="w-3 h-3" />
-        </a>
+
+        <div className="flex items-center gap-2 pt-1 border-t border-white/5">
+          <button
+            onClick={onOpenCredits}
+            className="flex-1 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors"
+          >
+            <Info className="w-3.5 h-3.5 text-spotify-green" />
+            <span>Credits</span>
+          </button>
+          <a
+            href="https://github.com/Dannystark-07"
+            target="_blank"
+            rel="noreferrer"
+            className="px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-spotify-green hover:text-black text-white text-[11px] font-semibold flex items-center justify-center gap-1 transition-all"
+            title="DannyStark on GitHub"
+          >
+            <Github className="w-3.5 h-3.5" />
+          </a>
+        </div>
       </div>
     </aside>
   );

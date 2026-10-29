@@ -2,6 +2,16 @@
   "name": "spotifree-v2",
   "private": true,
   "version": "2.0.0",
+  "description": "Unlimited full-length music streaming application with global artists and charts - No login required.",
+  "author": {
+    "name": "DannyStark",
+    "url": "https://github.com/Dannystark-07"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dannystark-07/SpotiFree-v.2.git"
+  },
+  "homepage": "https://github.com/Dannystark-07/SpotiFree-v.2",
   "type": "module",
   "scripts": {
     "dev": "vite",

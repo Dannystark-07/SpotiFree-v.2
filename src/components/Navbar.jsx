@@ -8,10 +8,11 @@ import {
   Sparkles,
   Share2,
   Check,
+  Info,
 } from "lucide-react";
 import { useAudio } from "../context/AudioContext";
 
-export default function Navbar() {
+export default function Navbar({ onOpenCredits }) {
   const {
     currentView,
     setCurrentView,
@@ -99,8 +100,21 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Right: Share, GitHub Link & Guest Status */}
+      {/* Right: Credits, Share, GitHub Link & Guest Status */}
       <div className="flex items-center gap-3">
+        {/* Developer & Credits Modal Trigger */}
+        <button
+          onClick={onOpenCredits}
+          className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all border border-white/10 group"
+          title="Developer & Project Credits"
+        >
+          <span className="w-2 h-2 rounded-full bg-spotify-green group-hover:scale-125 transition-transform" />
+          <span>v2.0.0</span>
+          <span className="text-neutral-400 font-normal hidden md:inline">
+            • DannyStark
+          </span>
+        </button>
+
         {/* Share with Friends Button */}
         <button
           onClick={handleShare}
