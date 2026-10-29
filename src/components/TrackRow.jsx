@@ -26,6 +26,7 @@ export default function TrackRow({
     addToQueue,
     userPlaylists,
     addToPlaylist,
+    navigateTo,
   } = useAudio();
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -96,7 +97,13 @@ export default function TrackRow({
             >
               {track.title}
             </p>
-            <p className="text-xs text-neutral-400 truncate hover:text-white cursor-pointer">
+            <p
+              onClick={(e) => {
+                e.stopPropagation();
+                navigateTo("artist", track.artist);
+              }}
+              className="text-xs text-neutral-400 truncate hover:text-white hover:underline cursor-pointer"
+            >
               {track.artist}
             </p>
           </div>

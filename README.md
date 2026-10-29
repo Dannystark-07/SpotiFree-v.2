@@ -13,8 +13,13 @@
 ## ✨ Features
 
 - **No Sign-In / No Login Required**: Start listening immediately with zero account creation or authentication friction.
+- **100% Full-Length Songs**: Complete, unmetered audio playback with no 30-second preview limits.
+- **Artists & Music All Over the World**:
+  - Global catalog spanning **North America, Latin America, Europe, Asia, Africa, and Oceania**.
+  - Dedicated **Artist Profile View** for global stars (The Weeknd, Taylor Swift, Bad Bunny, BTS, Burna Boy, Coldplay, Arijit Singh, BLACKPINK, Rosalía, Fujii Kaze, Tyla, Tame Impala, and more) featuring bios, follower stats, and full-length discography.
+  - **Regional Charts & Sounds**: Global Top 50, Viva Latino & Reggaeton, K-Pop & Asian Wave, Afrobeats & Amapiano Global, UK & European Anthems, and Americas Billboard Hits.
 - **Continuous Audio Streaming Engine**: High-fidelity HTML5 Audio player with smooth playback, seeking, volume control, repeat (off / all / one), and shuffle.
-- **Live Global Music Search**: Powered by the public iTunes Search API to stream high-quality audio previews, official album art, and metadata for millions of tracks, artists, and albums.
+- **Live Global Music Search**: Powered by open music streaming protocols to stream complete songs, official artwork, and metadata for millions of tracks.
 - **Curated Playlists & Moods**: Pre-packaged high-energy workout playlists, Lo-Fi study beats, Synthwave night drive, and ambient focus sounds with direct streaming.
 - **Your Personal Library (Persisted)**:
   - **Liked Songs**: Heart any track to save it to your collection.

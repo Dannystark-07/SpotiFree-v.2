@@ -44,8 +44,9 @@ export function AudioProvider({ children }) {
   const [userPlaylists, setUserPlaylists] = useState(() => getStorage("playlists", CURATED_PLAYLISTS));
 
   // --- Active View / Page State ---
-  const [currentView, setCurrentView] = useState("home"); // 'home' | 'search' | 'library' | 'playlist' | 'liked'
+  const [currentView, setCurrentView] = useState("home"); // 'home' | 'search' | 'library' | 'playlist' | 'liked' | 'artist'
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [selectedArtist, setSelectedArtist] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isQueueOpen, setIsQueueOpen] = useState(false);
   const [isLyricsOpen, setIsLyricsOpen] = useState(false);
@@ -349,9 +350,13 @@ export function AudioProvider({ children }) {
   };
 
   // Navigation helpers
-  const navigateTo = (view, playlist = null) => {
+  const navigateTo = (view, payload = null) => {
     setCurrentView(view);
-    if (playlist) setSelectedPlaylist(playlist);
+    if (view === "playlist" && payload) {
+      setSelectedPlaylist(payload);
+    } else if (view === "artist" && payload) {
+      setSelectedArtist(payload);
+    }
   };
 
   return (
@@ -373,6 +378,8 @@ export function AudioProvider({ children }) {
         userPlaylists,
         currentView,
         selectedPlaylist,
+        selectedArtist,
+        setSelectedArtist,
         searchQuery,
         isQueueOpen,
         isLyricsOpen,

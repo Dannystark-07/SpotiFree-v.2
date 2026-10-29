@@ -51,6 +51,7 @@ export default function Player() {
     isLyricsOpen,
     setIsLyricsOpen,
     setIsFullscreenOpen,
+    navigateTo,
   } = useAudio();
 
   const [isScrubbing, setIsScrubbing] = useState(false);
@@ -108,7 +109,10 @@ export default function Player() {
           <h4 className="text-sm font-semibold text-white truncate hover:underline cursor-pointer">
             {currentTrack.title}
           </h4>
-          <p className="text-xs text-neutral-400 truncate hover:text-white hover:underline cursor-pointer">
+          <p
+            onClick={() => navigateTo("artist", currentTrack.artist)}
+            className="text-xs text-neutral-400 truncate hover:text-white hover:underline cursor-pointer"
+          >
             {currentTrack.artist}
           </p>
         </div>

@@ -12,9 +12,10 @@ import HomeView from "./pages/HomeView";
 import SearchView from "./pages/SearchView";
 import LibraryView from "./pages/LibraryView";
 import PlaylistView from "./pages/PlaylistView";
+import ArtistView from "./pages/ArtistView";
 
 function MainContent({ onCreatePlaylistOpen }) {
-  const { currentView, selectedPlaylist } = useAudio();
+  const { currentView, selectedPlaylist, selectedArtist } = useAudio();
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-black">
@@ -32,6 +33,7 @@ function MainContent({ onCreatePlaylistOpen }) {
           <PlaylistView playlist={selectedPlaylist} />
         )}
         {currentView === "liked" && <PlaylistView isLikedView={true} />}
+        {currentView === "artist" && <ArtistView artist={selectedArtist} />}
       </main>
     </div>
   );

@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Search, Loader2, Play, Music, Sparkles } from "lucide-react";
+import { Search, Loader2, Play, Music, Sparkles, BadgeCheck, Globe2 } from "lucide-react";
 import { useAudio } from "../context/AudioContext";
 import { searchTracks } from "../services/musicApi";
-import { GENRES_LIST, DEFAULT_TRACKS } from "../data/mockTracks";
+import { GENRES_LIST } from "../data/mockTracks";
+import { GLOBAL_ARTISTS } from "../data/globalMusic";
 import TrackRow from "../components/TrackRow";
 
 export default function SearchView() {
-  const { searchQuery, setSearchQuery, playTrack } = useAudio();
+  const { searchQuery, setSearchQuery, playTrack, navigateTo } = useAudio();
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Matching artists from global directory
+  const matchingArtists = searchQuery.trim()
+    ? GLOBAL_ARTISTS.filter(
+        (a) =>
+          a.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          a.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          a.region.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          a.genre.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   // Debounced search when searchQuery changes
   useEffect(() => {
@@ -34,7 +46,6 @@ export default function SearchView() {
   }, [searchQuery]);
 
   const topResult = results[0];
-  const songResults = results.slice(1);
 
   return (
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
@@ -52,8 +63,45 @@ export default function SearchView() {
       {isLoading && (
         <div className="flex items-center gap-3 py-6 text-spotify-green">
           <Loader2 className="w-5 h-5 animate-spin" />
-          <span className="text-sm font-medium">Searching live catalog...</span>
+          <span className="text-sm font-medium">Searching global music catalog...</span>
         </div>
+      )}
+
+      {/* Matching Artists Section */}
+      {searchQuery && matchingArtists.length > 0 && (
+        <section className="space-y-3">
+          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <BadgeCheck className="w-5 h-5 text-spotify-green fill-spotify-green" />
+            Artists
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {matchingArtists.map((artist) => (
+              <div
+                key={artist.id}
+                onClick={() => navigateTo("artist", artist)}
+                className="group p-4 bg-neutral-900/60 hover:bg-neutral-800/80 rounded-xl cursor-pointer transition-all border border-white/5 text-center flex flex-col items-center"
+              >
+                <div className="relative aspect-square w-full rounded-full overflow-hidden mb-3 shadow-lg">
+                  <img
+                    src={artist.image}
+                    alt={artist.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <h4 className="font-bold text-sm text-white truncate max-w-full group-hover:text-spotify-green transition-colors">
+                  {artist.name}
+                </h4>
+                <p className="text-xs text-neutral-400 flex items-center justify-center gap-1 mt-0.5">
+                  <span>{artist.flag}</span>
+                  <span>{artist.country}</span>
+                </p>
+                <span className="text-[10px] text-neutral-500 font-mono mt-0.5">
+                  {artist.monthlyListeners} monthly
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Results View */}
@@ -77,7 +125,13 @@ export default function SearchView() {
                     <h4 className="text-xl font-bold text-white group-hover:text-spotify-green transition-colors line-clamp-1">
                       {topResult.title}
                     </h4>
-                    <p className="text-sm text-neutral-400 mt-1 line-clamp-1">
+                    <p
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigateTo("artist", topResult.artist);
+                      }}
+                      className="text-sm text-neutral-400 mt-1 line-clamp-1 hover:text-white hover:underline cursor-pointer"
+                    >
                       {topResult.artist}
                     </p>
                     <span className="inline-block mt-3 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/40 text-neutral-300">
@@ -100,7 +154,7 @@ export default function SearchView() {
 
             {/* Songs List */}
             <div className="lg:col-span-2 space-y-3">
-              <h3 className="text-lg font-bold text-white">Songs</h3>
+              <h3 className="text-lg font-bold text-white">Full-Length Songs</h3>
               <div className="bg-neutral-900/40 rounded-xl p-2 border border-white/5 space-y-1">
                 {results.slice(0, 6).map((track, i) => (
                   <TrackRow
@@ -134,7 +188,7 @@ export default function SearchView() {
       )}
 
       {/* No results message */}
-      {searchQuery && !isLoading && results.length === 0 && (
+      {searchQuery && !isLoading && results.length === 0 && matchingArtists.length === 0 && (
         <div className="text-center py-16 space-y-2">
           <p className="text-lg font-bold text-white">
             No results found for "{searchQuery}"
@@ -145,7 +199,42 @@ export default function SearchView() {
         </div>
       )}
 
-      {/* Browse All Genres (When not searching or as discovery) */}
+      {/* Featured Global Artists (When not actively searching) */}
+      {!searchQuery && (
+        <section className="space-y-4">
+          <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+            <Globe2 className="w-5 h-5 text-spotify-green" />
+            Featured Artists Across the Globe
+          </h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {GLOBAL_ARTISTS.slice(0, 12).map((artist) => (
+              <div
+                key={artist.id}
+                onClick={() => navigateTo("artist", artist)}
+                className="group p-4 bg-neutral-900/60 hover:bg-neutral-800/80 rounded-xl cursor-pointer transition-all border border-white/5 text-center flex flex-col items-center"
+              >
+                <div className="relative aspect-square w-full rounded-full overflow-hidden mb-3 shadow-lg">
+                  <img
+                    src={artist.image}
+                    alt={artist.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <h4 className="font-bold text-sm text-white truncate max-w-full group-hover:text-spotify-green transition-colors">
+                  {artist.name}
+                </h4>
+                <p className="text-xs text-neutral-400 flex items-center justify-center gap-1 mt-0.5">
+                  <span>{artist.flag}</span>
+                  <span>{artist.country}</span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Browse All Genres */}
       <section className="space-y-4">
         <h2 className="text-xl font-bold text-white tracking-tight">
           Browse All Genres
